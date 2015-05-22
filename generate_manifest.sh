@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# creates manifest file for autoupdater and copies sysupgrade images to autoupdater location
+#
+
 # create missing model identifiers on the router with the following command:
 # cat /tmp/sysinfo/model | tr '[A-Z]' '[a-z]' | sed -r 's/[^a-z0-9]+/-/g;s/-$//'
 #
@@ -11,6 +15,8 @@ firmware_version=0.4.5
 firmware_path=/var/www/firmware
 target_system=ar71xx
 
+autoupdater_path=/var/www/freifunk/firmware/autoupdater/
+
 
 # **** NO CHANGES BELOW THIS LINE ******
 
@@ -20,7 +26,9 @@ target_system=ar71xx
 # test for sha512sum command
 [ ! -e "/usr/bin/sha512sum" ] && echo "Install sha512sum command (Debian package coreutils)" && exit 1
 # test for model_list
-[ ! -e model_list ] && echo "model_list file not present"  && exit 1
+[ ! -e model_list ] && echo "model_list file not present" && exit 1
+
+echo -e "Generating manifest...\n"
 
 # remove old manifest
 rm -f manifest
@@ -38,9 +46,16 @@ cat ./model_list | while read linha; do
 
   echo $model $firmware_version $sum $firmware >> manifest
 
+  # cp sysupgrade.img to correct position in fs tree and set owner
+  echo "copying $target_system/$firmware to $autoupdater_path" 
+  cp $firmware_path/$firmware_version/$target_system/$firmware $autoupdater_path
+  chown -f www-data.www-data $autoupdater_path/$firmware
+
 done
 
 # build file tail
 echo -e "\n# after three dashes follow the ecdsa signatures of everything above the dashes" >> manifest
 
-echo -e "Manifest successfully created.\nPlease sign with ecdsasign and add signatures below three dashes. Place each signature in a separate line."
+echo -e "\nManifest successfully created.\nPlease sign with ecdsasign and add signatures below three dashes. Place each signature in a separate line.\nCopy manifest to $autoupdater_path.\n"
+echo -e "Don't forget to assign correct autoupdater v6 address to interface bat0 on the update server: ip addr add <addr> dev bat0"
+echo -e "Address can be found here: https://github.com/ffulm/firmware/blob/master/files/etc/config/autoupdater"
