@@ -15,7 +15,8 @@ firmware_version=0.4.5
 firmware_path=/var/www/firmware
 target_system=ar71xx
 
-autoupdater_path=/var/www/freifunk/firmware/autoupdater/
+webserver_root=/var/www/
+rel_autoupdater_path=freifunk/firmware/autoupdater/
 
 
 # **** NO CHANGES BELOW THIS LINE ******
@@ -29,8 +30,8 @@ autoupdater_path=/var/www/freifunk/firmware/autoupdater/
 [ ! -e model_list ] && echo "model_list file not present" && exit 1
 
 # create path to autoupdater directory and set webserver owner
-mkdir -p $autoupdater_path
-chown -f www-data.www-data $autoupdater_path
+mkdir -p $webserver_root$rel_autoupdater_path
+chown -f www-data.www-data $rel_autoupdater_path
 
 echo -e "Generating manifest...\n"
 
@@ -51,9 +52,9 @@ cat ./model_list | while read linha; do
   echo $model $firmware_version $sum $firmware >> manifest
 
   # cp sysupgrade.img to correct position in fs tree and set owner
-  echo "copying $target_system/$firmware to $autoupdater_path" 
-  cp $firmware_path/$firmware_version/$target_system/$firmware $autoupdater_path
-  chown -f www-data.www-data $autoupdater_path/$firmware
+  echo "copying $target_system/$firmware to $webserver_root$rel_autoupdater_path" 
+  cp $firmware_path/$firmware_version/$target_system/$firmware $webserver_root/$rel_autoupdater_path
+  chown -f www-data.www-data $webserver_root/$rel_autoupdater_path/$firmware
 
 done
 
@@ -61,6 +62,6 @@ done
 echo -e "\n# after three dashes follow the ecdsa signatures of everything above the dashes" >> manifest
 
 # output further info on next steps
-echo -e "\nManifest successfully created.\nPlease sign with ecdsasign and add signatures below three dashes. Place each signature in a separate line.\nCopy manifest to $autoupdater_path.\n"
+echo -e "\nManifest successfully created.\nPlease sign with ecdsasign and add signatures below three dashes. Place each signature in a separate line.\nCopy manifest to $webserver_root$rel_autoupdater_path.\n"
 echo -e "Don't forget to assign correct autoupdater v6 address to interface bat0 on the update server: ip addr add <addr> dev bat0"
 echo -e "Address can be found here: https://github.com/ffulm/firmware/blob/master/files/etc/config/autoupdater"
