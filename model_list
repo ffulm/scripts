@@ -4,9 +4,9 @@ tp-link-tl-wr703n-v1 openwrt-ar71xx-generic-tl-wr703n-v1-squashfs-sysupgrade.bin
 tp-link-tl-wr740n-nd-v1 openwrt-ar71xx-generic-tl-wr740n-v1-squashfs-sysupgrade.bin
 tp-link-tl-wr740n-nd-v3 openwrt-ar71xx-generic-tl-wr740n-v3-squashfs-sysupgrade.bin
 tp-link-tl-wr740n-nd-v4 openwrt-ar71xx-generic-tl-wr740n-v4-squashfs-sysupgrade.bin
-tp-link-tl-wr741n-nd-v1 openwrt-ar71xx-generic-tl-wr740n-v1-squashfs-sysupgrade.bin
-tp-link-tl-wr741n-nd-v2 openwrt-ar71xx-generic-tl-wr740n-v3-squashfs-sysupgrade.bin
-tp-link-tl-wr741n-nd-v4 openwrt-ar71xx-generic-tl-wr740n-v4-squashfs-sysupgrade.bin
+tp-link-tl-wr741n-nd-v1 openwrt-ar71xx-generic-tl-wr741nd-v1-squashfs-sysupgrade.bin
+tp-link-tl-wr741n-nd-v2 openwrt-ar71xx-generic-tl-wr741nd-v2-squashfs-sysupgrade.bin
+tp-link-tl-wr741n-nd-v4 openwrt-ar71xx-generic-tl-wr741nd-v4-squashfs-sysupgrade.bin
 tp-link-tl-wr841n-nd-v3 openwrt-ar71xx-generic-tl-wr841nd-v3-squashfs-sysupgrade.bin
 tp-link-tl-wr841n-nd-v5 openwrt-ar71xx-generic-tl-wr841nd-v5-squashfs-sysupgrade.bin
 tp-link-tl-wr841n-nd-v7 openwrt-ar71xx-generic-tl-wr841nd-v7-squashfs-sysupgrade.bin
