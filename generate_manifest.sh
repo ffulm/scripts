@@ -10,10 +10,9 @@
 # add identifier to model_list with proper sysupgrade.img
 
 # Firmware version to update to
-firmware_version=0.4.5
+firmware_version=0.5.1
 
 firmware_path=/var/www/firmware
-target_system=ar71xx
 
 webserver_root=/var/www/
 rel_autoupdater_path=freifunk/firmware/autoupdater/
@@ -47,12 +46,13 @@ cat ./model_list | while read linha; do
 
   model=`echo $linha | cut -d' ' -f1`
   firmware=`echo $linha | cut -d' ' -f2`
+  target_system=`echo $linha | cut -d' ' -f2 | cut -d'-' -f2`
   sum=`sha512sum $firmware_path/$firmware_version/$target_system/$firmware | cut -d' ' -f1`
 
   echo $model $firmware_version $sum $firmware >> manifest
 
   # cp sysupgrade.img to correct position in fs tree and set owner
-  echo "copying $target_system/$firmware to $webserver_root$rel_autoupdater_path" 
+  echo "copying ...$target_system/$firmware to $webserver_root$rel_autoupdater_path" 
   cp $firmware_path/$firmware_version/$target_system/$firmware $webserver_root/$rel_autoupdater_path
   chown -f www-data.www-data $webserver_root/$rel_autoupdater_path/$firmware
 
