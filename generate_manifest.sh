@@ -10,7 +10,7 @@
 # add identifier to model_list with proper sysupgrade.img
 
 # Firmware version to update to
-firmware_version=0.6.0
+firmware_version=0.6.1
 
 firmware_path=/var/www/firmware
 
