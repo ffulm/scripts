@@ -45,15 +45,16 @@ echo -e "BRANCH=stable\n\n# model version sha512sum filename" >> manifest
 cat ./model_list | while read linha; do
 
   model=`echo $linha | cut -d' ' -f1`
-  firmware=`echo $linha | cut -d' ' -f2`
-  target_system=`echo $linha | cut -d' ' -f2 | cut -d'-' -f2`
-  sum=`sha512sum $firmware_path/$firmware_version/$target_system/$firmware | cut -d' ' -f1`
+  firmware=`echo ffulm-$firmware_version-`
+  firmware+=`echo $linha | cut -d' ' -f2`
+  # target_system=`echo $linha | cut -d' ' -f2 | cut -d'-' -f2`
+  sum=`sha512sum $firmware_path/$firmware_version/$firmware | cut -d' ' -f1`
 
   echo $model $firmware_version $sum $firmware >> manifest
 
   # cp sysupgrade.img to correct position in fs tree and set owner
-  echo "copying ...$target_system/$firmware to $webserver_root$rel_autoupdater_path" 
-  cp $firmware_path/$firmware_version/$target_system/$firmware $webserver_root/$rel_autoupdater_path
+  echo "copying ...$firmware to $webserver_root$rel_autoupdater_path" 
+  cp $firmware_path/$firmware_version/$firmware $webserver_root/$rel_autoupdater_path
   chown -f www-data.www-data $webserver_root/$rel_autoupdater_path/$firmware
 
 done
