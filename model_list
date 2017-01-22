@@ -48,7 +48,7 @@ tp-link-cpe220-v1-0 ar71xx-generic-cpe210-220-squashfs-sysupgrade.bin
 tp-link-cpe510-v1-0 ar71xx-generic-cpe510-520-squashfs-sysupgrade.bin
 tp-link-cpe520-v1-0 ar71xx-generic-cpe510-520-squashfs-sysupgrade.bin
 ubiquiti-nanostation-m ar71xx-generic-ubnt-nano-m-squashfs-sysupgrade.bin
-ubiquiti-nanostation-loco-m2 generic-ubnt-bullet-m-squashfs-sysupgrade.bin
+ubiquiti-nanostation-loco-m2 ar71xx-generic-ubnt-bullet-m-squashfs-sysupgrade.bin
 ubiquiti-bullet-m ar71xx-generic-ubnt-bullet-m-squashfs-sysupgrade.bin
 ubiquiti-unifi ar71xx-generic-ubnt-unifi-squashfs-sysupgrade.bin
 d-link-dir-615-d ramips-rt305x-dir-615-d-squashfs-sysupgrade.bin
