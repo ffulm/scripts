@@ -60,6 +60,7 @@ ubiquiti-nanostation-loco-m2 ar71xx-generic-ubnt-bullet-m-squashfs-sysupgrade.bi
 ubiquiti-loco-m-xw ar71xx-generic-ubnt-loco-m-xw-squashfs-sysupgrade.bin
 ubiquiti-bullet-m ar71xx-generic-ubnt-bullet-m-squashfs-sysupgrade.bin
 ubiquiti-unifi ar71xx-generic-ubnt-unifi-squashfs-sysupgrade.bin
+ubiquiti-picostation-m2 ar71xx-generic-ubnt-bullet-m-squashfs-sysupgrade.bin
 tp-link-archer-c5-v1 ar71xx-generic-archer-c5-v1-squashfs-sysupgrade.bin
 tp-link-archer-c7-v1 ar71xx-generic-archer-c7-v1-squashfs-sysupgrade.bin
 tp-link-archer-c7-v2 ar71xx-generic-archer-c7-v2-squashfs-sysupgrade.bin
