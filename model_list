@@ -28,6 +28,7 @@ tp-link-tl-wr841n-v13 ramips-mt76x8-tl-wr841n-v13-squashfs-sysupgrade.bin
 tp-link-tl-wr842n-nd-v1 ar71xx-generic-tl-wr842n-v1-squashfs-sysupgrade.bin
 tp-link-tl-wr842n-nd-v2 ar71xx-generic-tl-wr842n-v2-squashfs-sysupgrade.bin
 tp-link-tl-wr940n-v4 ar71xx-tiny-tl-wr940n-v4-squashfs-sysupgrade.bin
+tp-link-tl-wr940n-v6 ar71xx-tiny-tl-wr940n-v6-squashfs-sysupgrade.bin
 tp-link-tl-wr941n-nd-v2 ar71xx-tiny-tl-wr941nd-v2-squashfs-sysupgrade.bin
 tp-link-tl-wr941n-nd-v3 ar71xx-tiny-tl-wr941nd-v3-squashfs-sysupgrade.bin
 tp-link-tl-wr941n-nd-v4 ar71xx-tiny-tl-wr941nd-v4-squashfs-sysupgrade.bin
@@ -64,5 +65,9 @@ ubiquiti-picostation-m2 ar71xx-generic-ubnt-bullet-m-squashfs-sysupgrade.bin
 tp-link-archer-c5-v1 ar71xx-generic-archer-c5-v1-squashfs-sysupgrade.bin
 tp-link-archer-c7-v1 ar71xx-generic-archer-c7-v1-squashfs-sysupgrade.bin
 tp-link-archer-c7-v2 ar71xx-generic-archer-c7-v2-squashfs-sysupgrade.bin
+tp-link-archer-c7-v4 ar71xx-generic-archer-c7-v4-squashfs-sysupgrade.bin
+tp-link-archer-c7-v5 ar71xx-generic-archer-c7-v5-squashfs-sysupgrade.bin
 tp-link-archer-c25-v1 ar71xx-generic-archer-c25-v1-squashfs-sysupgrade.bin
 buffalo-wzr-hp-ag300h-wzr-600dhp ar71xx-generic-wzr-600dhp-squashfs-sysupgrade.bin
+netgear-r6120 ramips-mt76x8-netgear_r6120-squashfs-sysupgrade.bin
+gl-inet-gl-ar150 ar71xx-generic-gl-ar150-squashfs-sysupgrade.bin
