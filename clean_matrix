@@ -60,7 +60,7 @@ local_rooms_count=`wc -l local_rooms.txt | awk '{ print $1 }'`
 echo "${green}(I) there are ${local_rooms_count} local rooms ${col_reset}"
 
 # purge history of local rooms
-# recurse through file list
+# recurse through room list
 while read line; 
 do 
   echo "${green}(I) deleting history 1 y back of local rooms ${line} ${col_reset}"
@@ -79,15 +79,6 @@ curl --header "Authorization: Bearer ${token}" -XPOST "http://localhost:8008/_sy
 echo "${green}(I) deleting all remote media older than 3 months${col_reset}"
 curl --header "Authorization: Bearer ${token}" -XPOST "http://localhost:8008/_synapse/admin/v1/purge_media_cache?before_ts=${purge_ts_3m}"
 
-# get all local users
-curl --header "Authorization: Bearer ${token}" -XGET "http://localhost:8008/_synapse/admin/v2/users?guests=false" > local_users.json
-jq '.users[].name' < local_users.json > local_users.txt
-local_users_count=`wc -l local_users.txt | awk '{ print $1 }'`
-echo "${green}(I) there are ${local_users_count} local users${col_reset}"
-# MISSING get all last_seen per device
-# MISSING compare to unix millis - time offset
-# MISSING decide: deactivate user?
-
 # calculate db updates
 echo "${green}(I) writing necessary db changes to db_change.sql${col_reset}"
 # init
@@ -102,6 +93,41 @@ do
   cat out.sql >> db_change.sql
 done < local_rooms.txt
 
+# get all local users
+curl --header "Authorization: Bearer ${token}" -XGET "http://localhost:8008/_synapse/admin/v2/users?guests=false" > local_users.json
+jq '.users[].name' < local_users.json > local_users.txt
+local_users_count=`wc -l local_users.txt | awk '{ print $1 }'`
+echo "${green}(I) there are ${local_users_count} local users${col_reset}"
+# init
+>inactive_users.txt
+# recurse through user list
+while read line;
+do
+  # remove quotes
+  line=${line:1: -1}
+  echo "${green}(I) Get info on ${line} ${col_reset}"
+  curl --header "Authorization: Bearer ${token}" -XGET "http://localhost:8008/_synapse/admin/v2/users/${line}/devices" > user.json
+  # check for number of devices
+  if [ `jq '.total' user.json` == 0 ]
+  then
+    echo "${red}user ${line} has NO DEVICES${col_reset}"
+    cat user.json
+    echo ${line} - no devices >> inactive_users.txt
+  else
+    # extract last_seen_ts and sort highest number to the top
+    jq -e '.devices[].last_seen_ts' user.json  | sort -nr > last_seen.txt
+    # take first value and compare to unix millis
+    read -r firstline<last_seen.txt
+    if (( firstline > purge_ts_1y ))
+    then
+      echo "${green}${firstline} > ${purge_ts_1y}: user ${line} is active${col_reset}"
+    else
+      echo "${red}${firstline} < ${purge_ts_1y}: user ${line} is INACTIVE${col_reset}"
+      echo ${line} - inactive >> inactive_users.txt
+    fi
+  fi
+done < local_users.txt
+
 echo
 echo "############"
 echo "run the following as root (with synapse running):"
@@ -115,6 +141,5 @@ echo "REINDEX VERBOSE DATABASE synapse;"
 echo "VACUUM FULL VERBOSE;"
 echo
 echo "Might take HOURS to complete! Matrix is not available during that period !"
-
 
 exit 0
