@@ -1,0 +1,120 @@
+#!/bin/bash
+
+# get token by command:
+# curl -XPOST -d '{"type":"m.login.password", "user":"@USER:server.matrix4ulm.de", "password":"PASS"}' "http://server.matrix4ulm.de:8008/_matrix/client/r0/login"
+# user must be HS admin
+
+# KEEP SECRET!
+token=""
+db_password=""
+# KEEP SECRET!
+
+# ******************
+
+# abort script on first error
+set -e
+set -u
+
+# get date one year back in UNIX millis
+purge_ts_1y=`date --date='1 year ago' +%s%3N`
+# get date three months back in UNIX millis
+purge_ts_3m=`date --date='3 months ago' +%s%3N`
+
+# config output colors
+red=`tput setaf 1`
+green=`tput setaf 2`
+col_reset=`tput sgr0`
+
+# check for https://github.com/matrix-org/rust-synapse-compress-state/ binary
+if ! [ -f synapse-compress-state ]; then
+  echo "(E) ${red}binary "synapse-compress-state" missing. Stop.${col_reset}"
+  echo "(I) Go to https://github.com/matrix-org/rust-synapse-compress-state/"
+  exit 1
+fi
+
+# Get rooms
+echo "${green}(I) get roomlist ${col_reset}"
+curl --header "Authorization: Bearer ${token}" 'http://localhost:8008/_synapse/admin/v1/rooms?limit=700' > roomlist.json
+
+# Filter for 0-user-rooms
+echo "${green}(I) filter for 0-user-rooms ${col_reset}"
+jq '.rooms[] | select(.joined_local_members == 0) | .room_id' < roomlist.json > local_0user_rooms.txt
+
+# count lines
+zerouserrooms=`wc -l local_0user_rooms.txt | awk '{ print $1 }'`
+echo "${green}(I) there are ${zerouserrooms} 0-user-rooms ${col_reset}"
+
+# recurse through file list
+while read line; 
+do 
+  # remove quotes
+  line=${line:1: -1}
+  echo "${green}(I) deleting 0-user-room ${line} ${col_reset}" 
+  curl --header "Authorization: Bearer ${token}" -XPOST -H "Content-Type: application/json" -d '{ }' "http://localhost:8008/_synapse/admin/v1/rooms/${line}/delete"
+  echo
+done < local_0user_rooms.txt
+
+# find all local rooms
+jq -r '.rooms[] | select(.room_id | endswith("server.matrix4ulm.de")) | [.room_id, .name] | @tsv' < roomlist.json > local_rooms.txt
+local_rooms_count=`wc -l local_rooms.txt | awk '{ print $1 }'`
+echo "${green}(I) there are ${local_rooms_count} local rooms ${col_reset}"
+
+# purge history of local rooms
+# recurse through file list
+while read line; 
+do 
+  echo "${green}(I) deleting history 1 y back of local rooms ${line} ${col_reset}"
+  room_id=`echo ${line} | awk '{ print $1 }'`
+  curl --header "Authorization: Bearer ${token}" -X POST -H "Content-Type: application/json" -d '{ "delete_local_events": true, "purge_up_to_ts": '${purge_ts_1y}' }' "http://localhost:8008/_synapse/admin/v1/purge_history/${room_id}"
+  echo
+done < local_rooms.txt
+
+# purge local media 
+echo "${green}(I) deleting all local media older than 1 year${col_reset}"
+curl --header "Authorization: Bearer ${token}" -XPOST "http://localhost:8008/_synapse/admin/v1/media/server.matrix4ulm.de/delete?before_ts=${purge_ts_1y}"
+echo "${green}(I) deleting all local media older than 3 months and bigger than 5 MB${col_reset}"
+curl --header "Authorization: Bearer ${token}" -XPOST "http://localhost:8008/_synapse/admin/v1/media/server.matrix4ulm.de/delete?before_ts=${purge_ts_3m}&size_gt=5000000"
+
+# purge remote media
+echo "${green}(I) deleting all remote media older than 3 months${col_reset}"
+curl --header "Authorization: Bearer ${token}" -XPOST "http://localhost:8008/_synapse/admin/v1/purge_media_cache?before_ts=${purge_ts_3m}"
+
+# get all local users
+curl --header "Authorization: Bearer ${token}" -XGET "http://localhost:8008/_synapse/admin/v2/users?guests=false" > local_users.json
+jq '.users[].name' < local_users.json > local_users.txt
+local_users_count=`wc -l local_users.txt | awk '{ print $1 }'`
+echo "${green}(I) there are ${local_users_count} local users${col_reset}"
+# MISSING get all last_seen per device
+# MISSING compare to unix millis - time offset
+# MISSING decide: deactivate user?
+
+# calculate db updates
+echo "${green}(I) writing necessary db changes to db_change.sql${col_reset}"
+# init
+>db_change.sql
+while read line;
+do
+  echo "${green}(I) ... for room ${line} ${col_reset}"
+  room_id=`echo ${line} | awk '{ print $1 }'`
+  echo ${room_id}
+  ./synapse-compress-state -p "host=localhost user=synapse_user password=${db_password} dbname=synapse" -r "${room_id}" -o out.sql -t
+  # append
+  cat out.sql >> db_change.sql
+done < local_rooms.txt
+
+echo
+echo "############"
+echo "run the following as root (with synapse running):"
+echo "su - postgres"
+echo "psql -U synapse_user -h 127.0.0.1 synapse < db_change.sql"
+echo
+echo "############"
+echo "STOP synapse: systemctl stop matrix-synapse"
+echo "...and run the following commands as postgres superuser:"
+echo "REINDEX VERBOSE DATABASE synapse;"
+echo "VACUUM FULL VERBOSE;"
+echo
+echo "Might take HOURS to complete! Matrix is not available during that period !"
+
+
+exit 0
