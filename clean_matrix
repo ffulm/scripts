@@ -111,7 +111,6 @@ do
   if [ `jq '.total' user.json` == 0 ]
   then
     echo "${red}user ${line} has NO DEVICES${col_reset}"
-    cat user.json
     echo ${line} - no devices >> inactive_users.txt
   else
     # extract last_seen_ts and sort highest number to the top
