@@ -40,6 +40,7 @@ tp-link-tl-wr941n-nd-v5 ar71xx-tiny-tl-wr941nd-v5-squashfs-sysupgrade.bin
 tp-link-tl-wr941n-nd-v6 ar71xx-tiny-tl-wr941nd-v6-squashfs-sysupgrade.bin
 tp-link-tl-wr1043n-nd-v1 ar71xx-generic-tl-wr1043nd-v1-squashfs-sysupgrade.bin
 tp-link-tl-wr1043n-nd-v2 ar71xx-generic-tl-wr1043nd-v2-squashfs-sysupgrade.bin
+tp-link-tl-wr1043nd-v2 ar71xx-generic-tl-wr1043nd-v2-squashfs-sysupgrade.bin
 tp-link-tl-wr1043n-nd-v3 ar71xx-generic-tl-wr1043nd-v3-squashfs-sysupgrade.bin
 tp-link-tl-wr1043n-nd-v4 ar71xx-generic-tl-wr1043nd-v4-squashfs-sysupgrade.bin
 tp-link-tl-wr1043n-v5 ar71xx-generic-tl-wr1043n-v5-squashfs-sysupgrade.bin
@@ -54,7 +55,7 @@ tp-link-tl-mr3420-v1 ar71xx-tiny-tl-mr3420-v1-squashfs-sysupgrade.bin
 tp-link-tl-mr3420-v2 ar71xx-tiny-tl-mr3420-v2-squashfs-sysupgrade.bin
 tp-link-cpe210-v1-0 ar71xx-generic-cpe210-220-v1-squashfs-sysupgrade.bin
 tp-link-cpe210-v1-1 ar71xx-generic-cpe210-220-v1-squashfs-sysupgrade.bin
-tp-link-cpe210-v3 ath79-generic-tplink_cpe210-v3-squashfs-sysupgrade.bin
+tp-link-cpe210-v3-0 ath79-generic-tplink_cpe210-v3-squashfs-sysupgrade.bin
 tp-link-cpe220-v1-0 ar71xx-generic-cpe210-220-v1-squashfs-sysupgrade.bin
 tp-link-cpe220-v3 ath79-generic-tplink_cpe220-v3-squashfs-sysupgrade.bin
 tp-link-cpe510-v1-0 ar71xx-generic-cpe510-520-v1-squashfs-sysupgrade.bin
@@ -66,7 +67,7 @@ tp-link-archer-c7-v4 ar71xx-generic-archer-c7-v4-squashfs-sysupgrade.bin
 tp-link-archer-c7-v5 ar71xx-generic-archer-c7-v5-squashfs-sysupgrade.bin
 tp-link-archer-c25-v1 ar71xx-generic-archer-c25-v1-squashfs-sysupgrade.bin
 alfa-network-n2-n5 ar71xx-generic-alfa-nx-squashfs-sysupgrade.bin
-avm-fritzbox-4020 ath79-generic-avm_fritz4020-squashfs-sysupgrade.bin
+avm-fritz-box-4020 ath79-generic-avm_fritz4020-squashfs-sysupgrade.bin
 ubiquiti-nanostation-m ar71xx-generic-ubnt-nano-m-squashfs-sysupgrade.bin
 ubiquiti-nanostation-m-xw ar71xx-generic-ubnt-nano-m-xw-squashfs-sysupgrade.bin
 ubiquiti-nanostation-m2 ar71xx-generic-ubnt-nano-m-squashfs-sysupgrade.bin
