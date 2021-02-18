@@ -136,7 +136,7 @@ echo
 echo "############"
 echo "STOP synapse: systemctl stop matrix-synapse"
 echo "...and run the following commands as postgres superuser:"
-echo "REINDEX VERBOSE DATABASE synapse;"
+echo "REINDEX (VERBOSE) DATABASE synapse;"
 echo "VACUUM FULL VERBOSE;"
 echo
 echo "Might take HOURS to complete! Matrix is not available during that period !"
