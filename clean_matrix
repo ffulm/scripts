@@ -113,6 +113,8 @@ do
     echo "${red}user ${line} has NO DEVICES${col_reset}"
     cat user.json
     echo ${line} - no devices >> inactive_users.txt
+    # erase user with no devices 
+    #curl --header "Authorization: Bearer ${token}" -XPOST -H "Content-Type: application/json" -d '{ "erase": true }' "http://localhost:8008/_synapse/admin/v1/deactivate/${line}"
   else
     # extract last_seen_ts and sort highest number to the top
     jq -e '.devices[].last_seen_ts' user.json  | sort -nr > last_seen.txt
@@ -124,6 +126,8 @@ do
     else
       echo "${red}${firstline} < ${purge_ts_1y}: user ${line} is INACTIVE${col_reset}"
       echo ${line} - inactive >> inactive_users.txt
+      # erase inactive users
+      #curl --header "Authorization: Bearer ${token}" -XPOST -H "Content-Type: application/json" -d '{ "erase": true }' "http://localhost:8008/_synapse/admin/v1/deactivate/${line}"
     fi
   fi
 done < local_users.txt
