@@ -111,7 +111,6 @@ do
   if [ `jq '.total' user.json` == 0 ]
   then
     echo "${red}user ${line} has NO DEVICES${col_reset}"
-    cat user.json
     echo ${line} - no devices >> inactive_users.txt
     # erase user with no devices 
     #curl --header "Authorization: Bearer ${token}" -XPOST -H "Content-Type: application/json" -d '{ "erase": true }' "http://localhost:8008/_synapse/admin/v1/deactivate/${line}"
@@ -141,7 +140,7 @@ echo
 echo "############"
 echo "STOP synapse: systemctl stop matrix-synapse"
 echo "...and run the following commands as postgres superuser:"
-echo "REINDEX VERBOSE DATABASE synapse;"
+echo "REINDEX (VERBOSE) DATABASE synapse;"
 echo "VACUUM FULL VERBOSE;"
 echo
 echo "Might take HOURS to complete! Matrix is not available during that period !"
